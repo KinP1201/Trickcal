@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>트릭컬 리바이브는 왜 재미있을까 — 재미 요소 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F8F1; --paper:#FFFFFF; --ink:#22304A; --ink-soft:#56627A;
+  --leaf:#2F8463; --leaf-pale:#DCEFE3; --cheek:#F38BA3; --cheek-pale:#FDE3EA;
+  --butter:#FFD25E; --line:#D3E3D8;
+  --display:'Jua','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --body:'Gowun Dodum','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#16201C; --paper:#1F2B26; --ink:#EAF2EC; --ink-soft:#A9B8AF;
+    --leaf:#6CCB9E; --leaf-pale:#24382F; --cheek:#F59AB0; --cheek-pale:#3A2730;
+    --butter:#F2C552; --line:#2F4239;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16201C; --paper:#1F2B26; --ink:#EAF2EC; --ink-soft:#A9B8AF;
+  --leaf:#6CCB9E; --leaf-pale:#24382F; --cheek:#F59AB0; --cheek-pale:#3A2730;
+  --butter:#F2C552; --line:#2F4239;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);
+  font-size:1.0625rem;line-height:1.75;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%}
+a{color:var(--leaf)}
+:focus-visible{outline:3px solid var(--butter);outline-offset:3px;border-radius:6px}
+
+.wrap{max-width:1040px;margin:0 auto;padding:0 1.25rem}
+.prose{max-width:38rem}
+
+/* ---------- Hero ---------- */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:2rem;align-items:center;
+  padding:4rem 0 3rem}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(2.4rem,6vw,4.2rem);
+  line-height:1.12;margin:0 0 1.25rem;letter-spacing:-.01em}
+.hero p{color:var(--ink-soft);margin:0 0 1rem;max-width:30rem}
+.stage{position:relative;aspect-ratio:1/1;max-width:420px;width:100%;justify-self:center;
+  touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.stage:active{cursor:grabbing}
+.stage svg{width:100%;height:100%;display:block;overflow:visible}
+.stage-note{font-family:var(--display);text-align:center;color:var(--ink-soft);margin-top:.5rem;font-size:1.05rem}
+.stage-note b{color:var(--cheek);font-weight:400}
+
+/* ---------- Sections ---------- */
+section{padding:3.5rem 0;border-top:2px dashed var(--line)}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,4vw,2.5rem);
+  line-height:1.2;margin:0 0 1rem}
+h3{font-family:var(--display);font-weight:400;font-size:1.45rem;line-height:1.3;margin:0 0 .5rem}
+p{margin:0 0 1rem}
+
+/* Fun element list: alternating, not a card grid */
+.fun{display:grid;grid-template-columns:7.5rem 1fr;gap:1.5rem;padding:2rem 0;
+  border-bottom:1px solid var(--line)}
+.fun:last-child{border-bottom:0}
+.fun .sticker{width:7rem;height:7rem;border-radius:50%;display:grid;place-items:center;
+  font-size:3rem;background:var(--leaf-pale);transform:rotate(-6deg)}
+.fun:nth-child(even) .sticker{background:var(--cheek-pale);transform:rotate(5deg)}
+.fun .why{display:inline-block;font-size:.95rem;color:var(--ink-soft);margin-bottom:.5rem}
+.fun ul{margin:.25rem 0 0;padding-left:1.1rem}
+.fun li{margin:.25rem 0}
+.fun .take{margin-top:.9rem;padding:.75rem 1rem;border-left:4px solid var(--butter);
+  background:var(--paper);border-radius:0 10px 10px 0}
+
+
+/* Matrix table */
+.table-scroll{overflow-x:auto;margin-top:1.25rem;border-radius:16px;border:2px solid var(--line);background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.98rem}
+th,td{padding:.75rem .9rem;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-family:var(--display);font-weight:400;font-size:1.05rem;background:var(--leaf-pale)}
+tbody tr:last-child td{border-bottom:0}
+td.dot{text-align:center;font-size:1.1rem;white-space:nowrap}
+.dot-strong{color:var(--leaf)} .dot-mid{color:var(--cheek)} .dot-weak{color:var(--line)}
+.legend{font-size:.92rem;color:var(--ink-soft);margin-top:.6rem}
+
+/* Risks */
+.risks{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem 2rem;margin-top:1.5rem}
+.risk h3{font-size:1.2rem}
+.risk p{color:var(--ink-soft);font-size:.98rem}
+
+/* Conclusion */
+.closing{background:var(--leaf);color:#fff;border-radius:32px;padding:2.5rem 2rem;margin:1rem 0 3rem}
+.closing h2{color:#fff}
+.closing p{max-width:40rem;color:#F1FAF5}
+:root[data-theme="dark"] .closing, .closing{}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .closing{color:#13201A}
+  :root:not([data-theme="light"]) .closing h2,:root:not([data-theme="light"]) .closing p{color:#13201A}}
+:root[data-theme="dark"] .closing,:root[data-theme="dark"] .closing h2,:root[data-theme="dark"] .closing p{color:#13201A}
+
+footer{color:var(--ink-soft);font-size:.9rem;padding:0 0 3rem}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;padding-top:2.5rem}
+  .stage{max-width:300px}
+  .fun{grid-template-columns:1fr;gap:.75rem}
+  .fun .sticker{width:4.5rem;height:4.5rem;font-size:2rem}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <header class="hero">
+    <div>
+      <h1>트릭컬 리바이브는 왜 계속 켜게 될까</h1>
+      <p>귀여운 볼따구, 자동 전투, 생활 콘텐츠, 그리고 2주마다 돌아오는 새 이야기. 에피드게임즈의 수집형 RPG가 어떤 재미 요소로 플레이어를 붙잡는지 하나씩 뜯어봅니다.</p>
+      <p>먼저 오른쪽 얼굴의 볼을 잡아당겨 보세요. 이 게임의 재미는 바로 그 손맛에서 시작합니다.</p>
+    </div>
+    <div>
+      <div class="stage" id="stage" role="img" aria-label="드래그해서 볼을 당길 수 있는 둥근 캐릭터 얼굴">
+        <svg id="face" viewBox="-160 -160 320 320" aria-hidden="true">
+          <path id="faceShape" fill="#FFE9D9" stroke="#22304A" stroke-width="5" stroke-linejoin="round"/>
+          <g id="features">
+            <ellipse id="blushL" cx="-62" cy="28" rx="22" ry="12" fill="#F38BA3" opacity=".7"/>
+            <ellipse id="blushR" cx="62" cy="28" rx="22" ry="12" fill="#F38BA3" opacity=".7"/>
+            <g id="eyesOpen">
+              <ellipse cx="-38" cy="-8" rx="9" ry="13" fill="#22304A"/>
+              <ellipse cx="38" cy="-8" rx="9" ry="13" fill="#22304A"/>
+              <circle cx="-35" cy="-13" r="3.2" fill="#fff"/>
+              <circle cx="41" cy="-13" r="3.2" fill="#fff"/>
+            </g>
+            <g id="eyesSquint" style="display:none" fill="none" stroke="#22304A" stroke-width="5" stroke-linecap="round">
+              <path d="M-50 -14 L-30 -6 L-50 2"/>
+              <path d="M50 -14 L30 -6 L50 2"/>
+            </g>
+            <path id="mouth" d="M-10 24 Q0 34 10 24" fill="none" stroke="#22304A" stroke-width="4.5" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <p class="stage-note" aria-live="polite">볼따구 당긴 횟수 <b id="count">0</b></p>
+    </div>
+  </header>
+
+  <section aria-labelledby="s-elements">
+    <h2 id="s-elements">재미 요소 여섯 갈래</h2>
+
+    <article class="fun">
+      <div class="sticker" aria-hidden="true">🫳</div>
+      <div class="prose">
+        <h3>캐릭터와의 교감: 손끝으로 느끼는 귀여움</h3>
+        <span class="why">건드리는 욕구 · 감각적 즐거움, 애착</span>
+        <p>캐릭터의 볼을 잡아당기고 쓰다듬는 상호작용이 게임의 얼굴입니다. 탭 한 번이 아니라 <em>끌어당기는</em> 조작이라 물리적인 반응이 손에 남고, 캐릭터마다 다른 표정과 대사가 돌아옵니다.</p>
+        <ul>
+          <li>보상과 무관하게 “그냥 해보고 싶은” 행동이라 진입 장벽이 없으며, 게임을 시작할 때부터 캐릭터의 볼을 당겨서 시작하게 해 캐릭터들의 볼을 잡아당길 수 있다는 사실을 자연스럽게 알려줍니다.</li>
+          <li>귀여움이 그림이 아니라 행동으로 전달돼, 스크린샷·짤로 퍼지기 좋은 바이럴 장치가 됩니다.</li>
+        </ul>
+        <p class="take">핵심은 <strong>터치 피드백의 질</strong>입니다. 대부분의 수집형 게임이 “캐릭터를 터치하면 대사”에서 멈추는 지점을, 탄성 있는 변형 애니메이션으로 한 단계 더 밀어붙였습니다.</p>
+      </div>
+    </article>
+
+    <article class="fun">
+      <div class="sticker" aria-hidden="true">🎎</div>
+      <div class="prose">
+        <h3>100명이 넘는 사도와 풀보이스 캐릭터성</h3>
+        <span class="why">건드리는 욕구 · 수집, 캐릭터 애정</span>
+        <p>스토어 소개 기준으로 100명 이상의 사도가 있고, 메인·이벤트 스토리 전편이 한국어 풀더빙입니다. 2주 간격으로 신규 사도와 스토리가 추가되는 리듬도 명확합니다.</p>
+        <ul>
+          <li>캐릭터 하나하나의 개성과 스토리 속의 활약이 “성능 때문”이 아니라 “얘가 좋아서” 뽑게 만듭니다.</li>
+          <li>풀보이스는 캐릭터에 대한 기억을 목소리로 고정시켜, 애착을 빠르게 쌓게 합니다.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="fun">
+      <div class="sticker" aria-hidden="true">🏠</div>
+      <div class="prose">
+        <h3>생활 콘텐츠: 본부, 연회장, 생산랩, 모험회</h3>
+        <span class="why">건드리는 욕구 · 표현, 휴식, 소유감, 유대감</span>
+        <p>집 꾸미기와 요리, 연구 같은 생활 콘텐츠가 전투와 별개의 리듬을 제공합니다. 이 영역은 이기고 지는 것이 없어서 경쟁에 지친 플레이어가 머무를 곳이 됩니다.</p>
+        <ul>
+          <li><strong>본부</strong>는 “내 교단”이라는 소유감과 꾸미기를 통한 자기표현 욕구를 채웁니다.</li>
+          <li><strong>연회장</strong>에서는 요리로 만든 음식을 사도들에게 주며 친밀도를 올립니다. 친밀도에 따라 스탯이 상승하고 상호작용이 해금되며, 애장품·윈드차임·꽁냥콜 같은 수집 요소와 사도의 개인 스토리를 해금해 열람할 수 있습니다.</li>
+          <li><strong>생산랩</strong>에서는 본부를 꾸미는 장식품이나 스킨 등을 제작할 수 있고, 연구를 통해 사도들의 능력치를 상승시킬 수 있습니다.</li>
+          <li><strong>모험회</strong>에서는 요리와 생산랩에 쓸 재료를 수급하며, 캐릭터의 생활 레벨을 올려 미니 스토리와 일러스트를 해금합니다.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="fun">
+      <div class="sticker" aria-hidden="true">🎲</div>
+      <div class="prose">
+        <h3>시즌마다 바뀌는 미니게임</h3>
+        <span class="why">건드리는 욕구 · 새로움, 가벼운 도전</span>
+        <p>이벤트 시즌마다 새로운 미니게임이 등장합니다. 본편의 자동 전투와 달리 직접 조작하는 경우가 많아, 반복 플레이 속에서 손을 쓰는 변주가 됩니다.</p>
+        <ul>
+          <li>매 시즌 규칙이 바뀌어 “이번엔 뭐가 나올까”라는 기대감이 생깁니다.</li>
+          <li>육성 수준과 상관없이 즐길 수 있어 신규·복귀 유저도 바로 참여할 수 있습니다.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="fun">
+      <div class="sticker" aria-hidden="true">🌳</div>
+      <div class="prose">
+        <h3>우당탕탕 세계관과 개그 스토리</h3>
+        <span class="why">건드리는 욕구 · 몰입, 웃음, 공유</span>
+        <p>플레이어는 세계수를 중심으로 한 세계 ‘엘리아스’에서 얼떨결에 교주가 된 인물입니다. 무게 잡는 서사보다 엉뚱한 상황극과 캐릭터 간 티키타카가 중심이라, 스토리 자체가 보상처럼 느껴집니다.</p>
+        <ul>
+          <li>대사와 상황이 짤로 잘라 쓰기 좋아 커뮤니티 밈의 재료가 됩니다.</li>
+          <li>한국어 풀더빙으로 캐릭터의 목소리와 연기가 더해져 스토리 몰입감이 높아집니다.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="fun">
+      <div class="sticker" aria-hidden="true">💬</div>
+      <div class="prose">
+        <h3>커뮤니티와 운영이 만드는 소속감</h3>
+        <span class="why">건드리는 욕구 · 사회적 연결, 신뢰</span>
+        <p>공식 카페와 게임 라운지를 중심으로 2차 창작, 공략, 밈이 활발하게 돌아갑니다. 게임 밖에서 같은 캐릭터를 좋아하는 사람들과 이야기하는 경험이 게임 안의 재미를 증폭시킵니다.</p>
+        <ul>
+          <li>“같이 좋아하는 사람이 많다”는 감각이 이탈을 막는 사회적 접착제가 됩니다.</li>
+          <li>운영의 소통 방식과 유저 피드백 반영이 게임에 대한 신뢰로 이어집니다.</li>
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <section aria-labelledby="s-matrix">
+    <div class="prose">
+      <h2 id="s-matrix">어떤 플레이어에게 어떤 재미가 닿나</h2>
+      <p>플레이 동기를 세 유형으로 나눠, 각 재미 요소가 어느 쪽에 강하게 작용하는지 정리했습니다. 정량 데이터가 아니라 설계 의도를 기준으로 한 정성적 평가입니다.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th scope="col">재미 요소</th><th scope="col">애정형<br><small>캐릭터가 좋아서</small></th><th scope="col">수집·성장형<br><small>채우고 키우고 싶어서</small></th><th scope="col">휴식형<br><small>편하게 쉬고 싶어서</small></th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">캐릭터와의 교감</th><td class="dot"><span class="dot-strong">●●●</span></td><td class="dot"><span class="dot-weak">●</span></td><td class="dot"><span class="dot-strong">●●●</span></td></tr>
+          <tr><th scope="row">사도 수집·풀보이스</th><td class="dot"><span class="dot-strong">●●●</span></td><td class="dot"><span class="dot-strong">●●●</span></td><td class="dot"><span class="dot-weak">●</span></td></tr>
+          <tr><th scope="row">생활 콘텐츠</th><td class="dot"><span class="dot-mid">●●</span></td><td class="dot"><span class="dot-mid">●●</span></td><td class="dot"><span class="dot-strong">●●●</span></td></tr>
+          <tr><th scope="row">시즌 미니게임</th><td class="dot"><span class="dot-mid">●●</span></td><td class="dot"><span class="dot-weak">●</span></td><td class="dot"><span class="dot-strong">●●●</span></td></tr>
+          <tr><th scope="row">개그 스토리</th><td class="dot"><span class="dot-strong">●●●</span></td><td class="dot"><span class="dot-weak">●</span></td><td class="dot"><span class="dot-strong">●●●</span></td></tr>
+          <tr><th scope="row">커뮤니티</th><td class="dot"><span class="dot-strong">●●●</span></td><td class="dot"><span class="dot-weak">●</span></td><td class="dot"><span class="dot-mid">●●</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="legend">●●● 강하게 작용 · ●● 보통 · ● 약하게 작용</p>
+    <div class="prose">
+      <p>표를 보면 <strong>애정형과 휴식형</strong> 칸이 가장 진합니다. 트릭컬 리바이브는 경쟁형 하드코어 유저보다 “캐릭터를 좋아하고 부담 없이 오래 머무는” 유저를 핵심 타깃으로 설계된 게임이라고 읽을 수 있습니다.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-risk">
+    <div class="prose">
+      <h2 id="s-risk">재미를 깎을 수 있는 지점</h2>
+      <p>강점은 그대로 약점의 씨앗이기도 합니다. 분석의 균형을 위해 리스크도 함께 짚어둡니다.</p>
+    </div>
+    <div class="risks">
+      <div class="risk">
+        <h3>최애와 성능의 괴리</h3>
+        <p>애정으로 뽑은 캐릭터가 고난도 콘텐츠에서 쓰이지 못하면 애착이 오히려 좌절감으로 바뀝니다. 성격 시너지가 이 간극을 얼마나 메워주느냐가 관건입니다.</p>
+      </div>
+      <div class="risk">
+        <h3>뽑기 의존 수익 구조</h3>
+        <p>캐릭터 수집이 재미의 중심인 만큼, 천장·재화 수급이 박하게 느껴지면 애정이 곧바로 불만으로 번집니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="closing">
+    <h2>결론: 숫자보다 귀여움</h2>
+    <p>트릭컬 리바이브의 차별점은 새로운 장르 문법이 아니라, 익숙한 수집형 RPG 구조 위에 <strong>“다시 보고 싶은 귀여운 캐릭터”</strong>라는 감각적 경험을 얹은 데 있습니다. 교감이 애착을 만들고, 애착이 수집과 콘텐츠를 모두 끌고 갑니다.</p>
+    <p>그래서 이 게임에서 가장 중요한 지표는 전투력보다 “오늘도 캐릭터를 보러 들어왔는가”일지 모릅니다.</p>
+  </div>
+
+  <footer>
+    <p>게임 정보는 공식 앱스토어 소개와 공개 공략 자료를 바탕으로 정리했으며, 플레이어 유형 평가는 필자의 정성적 해석입니다. 수치·시스템 세부 사항은 업데이트에 따라 달라질 수 있습니다.</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+  const N = 28, R = 120;
+  const base = [];
+  for(let i=0;i<N;i++){
+    const a = i/N*Math.PI*2;
+    // slightly wider, squishy chibi head
+    base.push({x:Math.cos(a)*R*1.08, y:Math.sin(a)*R*0.98 + (Math.sin(a)>0?Math.sin(a)*8:0)});
+  }
+  const disp = base.map(()=>({x:0,y:0}));
+  const vel  = base.map(()=>({x:0,y:0}));
+  const shape = document.getElementById('faceShape');
+  const svg = document.getElementById('face');
+  const stage = document.getElementById('stage');
+  const eyesOpen = document.getElementById('eyesOpen');
+  const eyesSquint = document.getElementById('eyesSquint');
+  const mouth = document.getElementById('mouth');
+  const blushL = document.getElementById('blushL');
+  const blushR = document.getElementById('blushR');
+  const countEl = document.getElementById('count');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let count = 0, grab = null, raf = null;
+
+  function path(){
+    const p = base.map((b,i)=>({x:b.x+disp[i].x, y:b.y+disp[i].y}));
+    let d = `M${p[0].x.toFixed(1)} ${p[0].y.toFixed(1)}`;
+    for(let i=0;i<N;i++){
+      const p0=p[(i-1+N)%N], p1=p[i], p2=p[(i+1)%N], p3=p[(i+2)%N];
+      const c1x=p1.x+(p2.x-p0.x)/6, c1y=p1.y+(p2.y-p0.y)/6;
+      const c2x=p2.x-(p3.x-p1.x)/6, c2y=p2.y-(p3.y-p1.y)/6;
+      d += ` C${c1x.toFixed(1)} ${c1y.toFixed(1)} ${c2x.toFixed(1)} ${c2y.toFixed(1)} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+    }
+    shape.setAttribute('d', d+'Z');
+  }
+  function toSvg(e){
+    const r = svg.getBoundingClientRect();
+    return {x:(e.clientX-r.left)/r.width*320-160, y:(e.clientY-r.top)/r.height*320-160};
+  }
+  function applyPull(dx,dy){
+    const len = Math.hypot(dx,dy), max = 110, k = len>max ? max/len : 1;
+    dx*=k; dy*=k;
+    for(let i=0;i<N;i++){
+      let da = Math.abs(i-grab.idx); da = Math.min(da, N-da);
+      const w = Math.exp(-(da*da)/(2*2.2*2.2));
+      disp[i].x = dx*w; disp[i].y = dy*w;
+    }
+    const s = Math.min(len/90,1);
+    const side = base[grab.idx].x < 0 ? blushL : blushR;
+    side.setAttribute('rx', 22 + s*10);
+    side.setAttribute('opacity', .7 + s*.3);
+    side.setAttribute('cx', (base[grab.idx].x<0?-62:62) + dx*.25);
+  }
+  function setFace(pulled){
+    eyesOpen.style.display = pulled ? 'none' : '';
+    eyesSquint.style.display = pulled ? '' : 'none';
+    mouth.setAttribute('d', pulled ? 'M-14 22 Q0 40 14 22 Z' : 'M-10 24 Q0 34 10 24');
+    mouth.setAttribute('fill', pulled ? '#22304A' : 'none');
+  }
+  function resetBlush(){
+    blushL.setAttribute('rx',22); blushR.setAttribute('rx',22);
+    blushL.setAttribute('cx',-62); blushR.setAttribute('cx',62);
+    blushL.setAttribute('opacity',.7); blushR.setAttribute('opacity',.7);
+  }
+
+  stage.addEventListener('pointerdown', e=>{
+    const p = toSvg(e);
+    const a = Math.atan2(p.y, p.x);
+    let idx = Math.round(((a<0?a+Math.PI*2:a)/(Math.PI*2))*N)%N;
+    grab = {idx, sx:p.x, sy:p.y};
+    stage.setPointerCapture(e.pointerId);
+    cancelAnimationFrame(raf);
+    setFace(true);
+  });
+  stage.addEventListener('pointermove', e=>{
+    if(!grab) return;
+    const p = toSvg(e);
+    applyPull(p.x-grab.sx, p.y-grab.sy);
+    path();
+  });
+  function release(){
+    if(!grab) return;
+    const pulled = disp.some(d=>Math.hypot(d.x,d.y)>20);
+    if(pulled){ count++; countEl.textContent = count; }
+    grab = null;
+    setFace(false); resetBlush();
+    if(reduce){ disp.forEach(d=>{d.x=0;d.y=0}); path(); return; }
+    vel.forEach(v=>{v.x=0;v.y=0});
+    const step = ()=>{
+      let energy = 0;
+      for(let i=0;i<N;i++){
+        vel[i].x = (vel[i].x - disp[i].x*0.22)*0.8;
+        vel[i].y = (vel[i].y - disp[i].y*0.22)*0.8;
+        disp[i].x += vel[i].x; disp[i].y += vel[i].y;
+        energy += Math.abs(disp[i].x)+Math.abs(disp[i].y)+Math.abs(vel[i].x)+Math.abs(vel[i].y);
+      }
+      path();
+      if(energy > 0.5) raf = requestAnimationFrame(step);
+      else { disp.forEach(d=>{d.x=0;d.y=0}); path(); }
+    };
+    raf = requestAnimationFrame(step);
+  }
+  stage.addEventListener('pointerup', release);
+  stage.addEventListener('pointercancel', release);
+  path();
+})();
+</script>
+</body>
+</html>
